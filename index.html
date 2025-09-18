@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Victor's SMM Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              burgundy: {
+                DEFAULT: '#800020',
+                '50': '#F2E6E9',
+                '100': '#E6CED3',
+                '200': '#D9B5BD',
+                '300': '#CC9CA8',
+                '400': '#BF8492',
+                '500': '#B36B7C',
+                '600': '#A65366',
+                '700': '#993B51',
+                '800': '#8C243B',
+                '900': '#800020',
+                '950': '#400010'
+              }
+            },
+            fontFamily: {
+              sans: ['Poppins', 'sans-serif'],
+            },
+            animation: {
+              'fade-in-out': 'fade-in-out 5s ease-in-out forwards',
+            },
+            keyframes: {
+              'fade-in-out': {
+                '0%': { opacity: '0', transform: 'translateY(10px)' },
+                '10%': { opacity: '1', transform: 'translateY(0)' },
+                '90%': { opacity: '1', transform: 'translateY(0)' },
+                '100%': { opacity: '0', transform: 'translateY(10px)' },
+              }
+            }
+          },
+        },
+      };
+    </script>
+  <link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-[#111] text-gray-100">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

@@ -4,20 +4,23 @@ import { Order, DepositRequest, DepositStatus } from '../types';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 // SVG Icons for the new dashboard navigation
+// Fix: Removed hardcoded `h-6 w-6` from className to allow parent to control it fully.
 const OrdersIcon = ({ className }: { className?: string }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" className={`h-6 w-6 ${className}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
     </svg>
 );
 
+// Fix: Removed hardcoded `h-6 w-6` from className to allow parent to control it fully.
 const DepositIcon = ({ className }: { className?: string }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" className={`h-6 w-6 ${className}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
     </svg>
 );
 
+// Fix: Removed hardcoded `h-6 w-6` from className to allow parent to control it fully.
 const ProfileIcon = ({ className }: { className?: string }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" className={`h-6 w-6 ${className}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
     </svg>
 );
@@ -103,10 +106,13 @@ const DashboardPage: React.FC = () => {
         }
     };
     
-    const NavItem: React.FC<{ view: 'orders' | 'deposits' | 'profile'; label: string; icon: React.ReactNode }> = ({ view, label, icon }) => (
+    // Fix: Corrected the type for the icon prop to be more specific.
+    // React.ReactElement is too generic and doesn't inform TypeScript that the component accepts a className prop.
+    // By using React.ReactElement<{ className?: string }>, we solve the type error with React.cloneElement.
+    const NavItem: React.FC<{ view: 'orders' | 'deposits' | 'profile'; label: string; icon: React.ReactElement<{ className?: string }> }> = ({ view, label, icon }) => (
         <button onClick={() => setActiveView(view)} className="flex flex-col items-center gap-1 text-gray-400 hover:text-white transition-colors">
             <div className={`p-3 rounded-lg ${activeView === view ? 'bg-gray-800' : 'bg-gray-900'}`}>
-                {React.cloneElement(icon as React.ReactElement, { className: `h-6 w-6 ${activeView === view ? 'text-white' : ''}`})}
+                {React.cloneElement(icon, { className: `h-6 w-6 ${activeView === view ? 'text-white' : ''}`})}
             </div>
             <span className={`text-xs font-semibold ${activeView === view ? 'text-white' : ''}`}>{label}</span>
         </button>

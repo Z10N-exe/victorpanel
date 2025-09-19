@@ -211,7 +211,14 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   }
 
   const signUp = async (username: string, email: string, password: string): Promise<boolean> => {
-    const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+    // The manual insert into 'public.users' has been removed from here.
+    // A database trigger ('handle_new_user') is already set up to automatically
+    // create a user profile when a new user signs up in 'auth.users'.
+    // Attempting to insert from the client-side caused the RLS violation error
+    // and was redundant.
+    
+    // We pass the username in options.data, which the trigger can then access.
+    const { error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -219,28 +226,14 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         },
     });
 
-    if (signUpError) {
-        console.error('Signup error:', signUpError.message);
-        showNotification(signUpError.message, 'error');
+    if (error) {
+        console.error('Signup error:', error.message);
+        showNotification(error.message, 'error');
         return false;
     }
     
-    if (signUpData.user) {
-        const { error: profileError } = await supabase
-            .from('users')
-            .insert({
-                id: signUpData.user.id,
-                username: username,
-                email: email,
-                balance: 0,
-            });
-
-        if (profileError) {
-            console.error('Error creating user profile:', profileError.message);
-            showNotification(`Account created, but profile creation failed: ${profileError.message}`, 'error');
-            return false;
-        }
-    }
+    // The previous manual profile insertion logic has been removed.
+    // The trigger handles profile creation, so no further action is needed here.
     
     showNotification('Signup successful! Please check your email for a confirmation link.', 'success');
     return true;
